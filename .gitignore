@@ -9,5 +9,5 @@ __pycache__/
 # Base de données de session ADK (locale, non partageable)
 my_agent/.adk/
 
-# Credentials locaux (jamais commiter les credentials réels)
-.env  ← volontairement NON ignoré
+# Credentials locaux
+.env
