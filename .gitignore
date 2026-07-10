@@ -10,4 +10,4 @@ __pycache__/
 my_agent/.adk/
 
 # Credentials locaux (jamais commiter les credentials réels)
-# .env  ← volontairement NON ignoré (repo privé, projet GCP non secret)
+.env  ← volontairement NON ignoré

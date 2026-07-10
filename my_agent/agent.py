@@ -32,6 +32,7 @@ from google.adk.tools.mcp_tool.mcp_toolset import (
     MCPToolset,
     StreamableHTTPConnectionParams,
 )
+from dotenv import load_dotenv
 
 # ---------------------------------------------------------------------------
 # Logging → shows up in the terminal running `adk web`
@@ -45,7 +46,7 @@ logger = logging.getLogger("token_monitor")
 # ---------------------------------------------------------------------------
 # Environment
 # ---------------------------------------------------------------------------
-os.environ["GOOGLE_CLOUD_LOCATION"] = "global"  # required for gemini-3.x models
+os.environ["GOOGLE_CLOUD_LOCATION"] = "global"
 
 _MCP_BASE_URL = os.environ.get(
     "MCP_BASE_URL",
@@ -53,7 +54,13 @@ _MCP_BASE_URL = os.environ.get(
 )
 
 # Fetch the API Key from your environment
-_MCP_API_KEY = os.environ.get("MCP_API_KEY", "XXXXX") # Replace with actual API key
+_MCP_API_KEY = os.getenv("MCP_API_KEY")
+# 3. Handle the case where the key might be missing
+if not _MCP_API_KEY:
+    raise ValueError("MCP_API_KEY is not set in the .env file!")
+
+# You can now safely pass `api_key` to your clients or functions
+print("API Key loaded successfully!")
 
 # ---------------------------------------------------------------------------
 # Per-turn token accumulators (reset when the final answer is produced)
