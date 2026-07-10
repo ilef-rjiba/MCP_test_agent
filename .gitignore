@@ -1,0 +1,13 @@
+# Environnement virtuel Python
+.venv/
+
+# Bytecode Python
+__pycache__/
+*.pyc
+*.pyo
+
+# Base de données de session ADK (locale, non partageable)
+my_agent/.adk/
+
+# Credentials locaux (jamais commiter les credentials réels)
+# .env  ← volontairement NON ignoré (repo privé, projet GCP non secret)
