@@ -1,4 +1,4 @@
-# 🤖 mcp-adk-agent
+# 🤖 mcp-test-agent
 
 An AI agent built with **Google ADK** (Agent Development Kit), connected to **Vertex AI** and tools exposed by a private **MCP Gateway** on Cloud Run, with automatic authentication through **Application Default Credentials**.
 
@@ -9,7 +9,7 @@ An AI agent built with **Google ADK** (Agent Development Kit), connected to **Ve
 ```bash
 # Clone
 git clone https://github.com/ilef-rjiba/MCP_test_agent.git
-cd mcp-adk-agent
+cd .\MCP_test_agent
 
 # Setup + auth + launch in one command
 make run
@@ -33,7 +33,7 @@ If the machine has nothing installed, follow this order:
 
 ```powershell
 git clone https://github.com/ilef-rjiba/MCP_test_agent.git
-cd mcp-adk-agent
+cd .\MCP_test_agent
 ```
 
 4. Create and activate the Python virtual environment:
@@ -142,7 +142,7 @@ gcloud auth application-default login
 ## 🏗️ Architecture
 
 ```
-mcp-adk-agent/
+MCP_test_agent/
 ├── my_agent/
 │   ├── __init__.py   # Exposes root_agent for ADK
 │   ├── agent.py      # Agent definition: model, tools, instructions
