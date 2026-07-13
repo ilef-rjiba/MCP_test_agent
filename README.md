@@ -4,7 +4,7 @@ An AI agent built with **Google ADK** (Agent Development Kit), connected to **Ve
 
 ---
 
-## ⚡ Quick Start
+## ⚡ Quick Start (for Linux environments)
 
 ```bash
 # Clone
@@ -80,7 +80,10 @@ gcloud auth login
 ```
 **(Crucial Step: Make sure you are signed in to the acn-researchplatform project)**
 
-if you are connected to a different project, sign up using this command :  gcloud config set project acn-researchplatform
+if you are connected to a different project, sign up using this command :  
+```
+gcloud config set project acn-researchplatform
+```
 
 9. Start the agent:
 
@@ -139,62 +142,3 @@ make auth
 # or directly:
 gcloud auth application-default login
 ```
-
-> **OIDC token for the MCP Gateway**: the Cloud Run server is private (`--no-allow-unauthenticated`). The agent automatically fetches an OIDC identity token from your ADC at startup. That token is valid for about **1 hour** — rerun `make run` if it expires.
-
----
-
-## 🏗️ Architecture
-
-```
-MCP_test_agent/
-├── my_agent/
-│   ├── __init__.py   # Exposes root_agent for ADK
-│   ├── agent.py      # Agent definition: model, tools, instructions
-│   └── tools.py      # Local Python tools (time, calculator)
-├── .env              # Vertex AI config (project, region)
-├── .env.example      # Template
-├── Makefile          # Setup and launch commands
-├── requirements.txt
-└── README.md
-```
-
-### Agent Flow
-
-```
-User
-    │
-    ▼
-ADK Web UI (localhost:8000)
-    │
-    ▼
-root_agent (Gemini 2.5 Flash via Vertex AI)
-    │
-    ├── MCPToolset ──── OIDC token ──►  MCP Gateway (Cloud Run)
-    │                                    └── dynamic tools
-    │
-    └── local tools (get_current_time, calculator)
-```
-
----
-
-## ⚙️ Configuration
-
-The `.env` file (copied from `.env.example`) contains:
-
-```ini
-GOOGLE_GENAI_USE_VERTEXAI=TRUE        # Vertex AI backend (required)
-GOOGLE_CLOUD_PROJECT=acn-researchplatform
-GOOGLE_CLOUD_LOCATION=us-central1     # Region (editable)
-```
-
----
-
-## 🔧 Troubleshooting
-
-| Error | Fix |
-|---|---|
-| `DefaultCredentialsError` | Run `make auth` again |
-| `Expired token (401)` after 1 hour | Run `make run` again |
-| `404 / model not found` | Check `GOOGLE_CLOUD_PROJECT` in `.env` |
-| `Port 8000 already in use` | `kill $(lsof -ti:8000)` and retry |
