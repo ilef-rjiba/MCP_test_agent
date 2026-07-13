@@ -21,8 +21,6 @@ Then open [http://localhost:8000](http://localhost:8000), select **`my_agent`**,
 
 ## 🪟 Windows Setup
 
-### Prerequisites
-
 If the machine has nothing installed, follow this order:
 
 1. Install these tools:
@@ -38,13 +36,7 @@ git clone https://github.com/ilef-rjiba/MCP_test_agent.git
 cd .\MCP_test_agent
 ```
 
-### Automated set up
-
-Run the following command to execute the windows_runner.bat file 
-
-### Manual set up
-
-1. Create and activate the Python virtual environment:
+4. Create and activate the Python virtual environment:
 
 ```powershell
 python -m venv .venv
@@ -57,20 +49,20 @@ If PowerShell blocks activation, run this once:
 Set-ExecutionPolicy -Scope CurrentUser RemoteSigned
 ```
 
-2. Install the Python dependencies:
+5. Install the Python dependencies:
 
 ```powershell
 python -m pip install --upgrade pip
 pip install -r requirements.txt
 ```
 
-3. Create the `.env` file from the template:
+6. Create the `.env` file from the template:
 
 ```powershell
 Copy-Item .env.example .env
 ```
 
-4. Make sure `.env` contains at least:
+7. Make sure `.env` contains at least:
 
 ```ini
 GOOGLE_GENAI_USE_VERTEXAI=TRUE
@@ -81,7 +73,7 @@ MCP_API_KEY=...
 
 **(Crucial Step: Make sure to update the .env MCP_API_KEY with its correct value)**
 
-5. Sign in to Google Cloud to create Application Default Credentials:
+8. Sign in to Google Cloud to create Application Default Credentials:
 
 ```powershell
 gcloud auth login
@@ -93,13 +85,13 @@ if you are connected to a different project, sign up using this command :
 gcloud config set project acn-researchplatform
 ```
 
-6. Start the agent:
+9. Start the agent:
 
 ```powershell
 adk web .
 ```
 
-7. Open [http://localhost:8000](http://localhost:8000), select **`my_agent`**, then begin chatting.
+10. Open [http://localhost:8000](http://localhost:8000), select **`my_agent`**, then begin chatting.
 
 ---
 
