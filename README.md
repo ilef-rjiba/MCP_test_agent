@@ -71,6 +71,8 @@ GOOGLE_CLOUD_LOCATION=us-central1
 MCP_API_KEY=...
 ```
 
+**(Crucial Step: Make sure to update the .env MCP_API_KEY with its correct value)**
+
 8. Sign in to Google Cloud to create Application Default Credentials:
 
 ```powershell
