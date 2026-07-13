@@ -2,3 +2,4 @@ google-adk
 mcp
 requests
 python-dotenv
+aiohttp

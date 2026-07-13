@@ -24,8 +24,9 @@ Then open [http://localhost:8000](http://localhost:8000), select **`my_agent`**,
 If the machine has nothing installed, follow this order:
 
 1. Install these tools:
-   - [Git for Windows](https://git-scm.com/download/win)
+   - [Git for Windows](https://git-scm.com/download/win) 
    - [Python 3.11+](https://www.python.org/downloads/windows/)
+   **(Crucial Step: During installation, the user must check the box that says "Add Python to PATH". Without this, the python command will fail in the terminal.)**
    - [Google Cloud SDK](https://cloud.google.com/sdk/docs/install)
 2. Restart PowerShell after installation if needed.
 3. Clone the repository and open the project folder:
