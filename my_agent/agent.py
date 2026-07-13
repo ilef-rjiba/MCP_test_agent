@@ -191,17 +191,26 @@ def track_tokens(
     if not is_final:
         return None
 
+    # Define a unique marker to detect existing footers
+    footer_marker = "\n\n---\n**Token usage**"
+    
     footer = (
-        f"\n\n---\n"
-        f"**Token usage** (this turn · {_totals['calls']} model calls)\n"
+        f"{footer_marker} (this turn · {_totals['calls']} model calls)\n"
         f"- Input: {_totals['prompt']}\n"
         f"- Output: {_totals['output']}\n"
-        f"- Thinking: {_totals['thinking']}\n"
         f"- **Total: {_totals['total']}**"
     )
 
     # rebuild content (assigning to llm_response.text is a silent no-op)
     new_parts = list(content.parts)
+    
+    # FIX: Strip out any existing footers in the text before appending the new one.
+    for i in range(len(new_parts)):
+        if getattr(new_parts[i], "text", None) and footer_marker in new_parts[i].text:
+            cleaned_text = new_parts[i].text.split(footer_marker)[0]
+            new_parts[i] = types.Part(text=cleaned_text)
+
+    # Append the fresh, accurate footer to the last text part
     for i in range(len(new_parts) - 1, -1, -1):
         if getattr(new_parts[i], "text", None):
             new_parts[i] = types.Part(text=new_parts[i].text + footer)
