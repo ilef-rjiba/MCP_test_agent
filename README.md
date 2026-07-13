@@ -39,7 +39,7 @@ cd mcp-adk-agent
 4. Create and activate the Python virtual environment:
 
 ```powershell
-py -3.11 -m venv .venv
+python -m venv .venv
 .\.venv\Scripts\Activate.ps1
 ```
 
