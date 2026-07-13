@@ -76,8 +76,11 @@ MCP_API_KEY=...
 8. Sign in to Google Cloud to create Application Default Credentials:
 
 ```powershell
-gcloud auth application-default login
+gcloud auth login
 ```
+**(Crucial Step: Make sure you are signed in to the acn-researchplatform project)**
+
+if you are connected to a different project, sign up using this command :  gcloud config set project acn-researchplatform
 
 9. Start the agent:
 
