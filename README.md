@@ -8,7 +8,7 @@ An AI agent built with **Google ADK** (Agent Development Kit), connected to **Ve
 
 ```bash
 # Clone
-git clone https://github.com/julienleber/mcp-adk-agent.git
+git clone https://github.com/ilef-rjiba/MCP_test_agent.git
 cd mcp-adk-agent
 
 # Setup + auth + launch in one command
