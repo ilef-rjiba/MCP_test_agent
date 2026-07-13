@@ -1,71 +1,140 @@
 # 🤖 mcp-adk-agent
 
-Agent IA basé sur **Google ADK** (Agent Development Kit), connecté à **Vertex AI** et aux outils exposés par un **MCP Gateway** (Cloud Run privé), avec authentification automatique via **Application Default Credentials**.
+An AI agent built with **Google ADK** (Agent Development Kit), connected to **Vertex AI** and tools exposed by a private **MCP Gateway** on Cloud Run, with automatic authentication through **Application Default Credentials**.
 
 ---
 
-## ⚡ Démarrage rapide
+## ⚡ Quick Start
 
 ```bash
 # Clone
 git clone https://github.com/julienleber/mcp-adk-agent.git
 cd mcp-adk-agent
 
-# Setup + auth + démarrage en une commande
+# Setup + auth + launch in one command
 make run
 ```
 
-Ouvre ensuite [http://localhost:8000](http://localhost:8000), sélectionne **`my_agent`** et discute !
+Then open [http://localhost:8000](http://localhost:8000), select **`my_agent`**, and start chatting.
 
 ---
 
-## 📋 Prérequis
+## 🪟 Windows Setup
 
-| Outil | Version | Installation |
-|---|---|---|
-| Python | ≥ 3.11 | [python.org](https://python.org) |
-| gcloud CLI | dernière | [cloud.google.com/sdk](https://cloud.google.com/sdk/docs/install) |
-| make | — | pré-installé sur macOS/Linux |
+If the machine has nothing installed, follow this order:
 
-Accès requis sur le projet GCP `acn-researchplatform` : rôle **Vertex AI User** (`roles/aiplatform.user`).
+1. Install these tools:
+   - [Git for Windows](https://git-scm.com/download/win)
+   - [Python 3.11+](https://www.python.org/downloads/windows/)
+   - [Google Cloud SDK](https://cloud.google.com/sdk/docs/install)
+2. Restart PowerShell after installation if needed.
+3. Clone the repository and open the project folder:
 
----
-
-## 🛠️ Commandes Make
-
-```
-make run     → setup + vérif auth + démarrage web  (commande principale)
-make setup   → crée le venv Python + installe les dépendances + copie .env
-make auth    → ré-authentification Google Cloud si token expiré
-make cli     → interface CLI interactive (terminal)
-make clean   → supprime .venv et les caches
-make help    → affiche toutes les commandes
+```powershell
+git clone https://github.com/julienleber/mcp-adk-agent.git
+cd mcp-adk-agent
 ```
 
-### Détail du flux `make run`
+4. Create and activate the Python virtual environment:
 
-```
-1. Crée .venv et installe les dépendances  (ignoré si déjà fait)
-2. Copie .env.example → .env               (ignoré si déjà fait)
-3. Vérifie les credentials Google Cloud
-   → si expirés : ouvre le navigateur pour ré-authentifier (gcloud auth application-default login)
-4. Lance adk web . → http://localhost:8000
+```powershell
+py -3.11 -m venv .venv
+.\.venv\Scripts\Activate.ps1
 ```
 
----
+If PowerShell blocks activation, run this once:
 
-## 🔐 Authentification
+```powershell
+Set-ExecutionPolicy -Scope CurrentUser RemoteSigned
+```
 
-Aucune clé API. L'agent utilise les **Application Default Credentials** (ADC) de ton compte Google Cloud.
+5. Install the Python dependencies:
 
-```bash
-# Première fois ou si token expiré
-make auth
-# ou directement :
+```powershell
+python -m pip install --upgrade pip
+pip install -r requirements.txt
+```
+
+6. Create the `.env` file from the template:
+
+```powershell
+Copy-Item .env.example .env
+```
+
+7. Make sure `.env` contains at least:
+
+```ini
+GOOGLE_GENAI_USE_VERTEXAI=TRUE
+GOOGLE_CLOUD_PROJECT=acn-researchplatform
+GOOGLE_CLOUD_LOCATION=us-central1
+MCP_API_KEY=...
+```
+
+8. Sign in to Google Cloud to create Application Default Credentials:
+
+```powershell
 gcloud auth application-default login
 ```
 
-> **Token OIDC pour le MCP Gateway** : le serveur Cloud Run est privé (`--no-allow-unauthenticated`). L'agent récupère automatiquement un identity token OIDC depuis tes ADC au démarrage. Ce token est valable **~1 heure** — relance `make run` s'il expire.
+9. Start the agent:
+
+```powershell
+adk web .
+```
+
+10. Open [http://localhost:8000](http://localhost:8000), select **`my_agent`**, then begin chatting.
+
+---
+
+## 📋 Prerequisites
+
+| Tool | Version | Installation |
+|---|---|---|
+| Python | >= 3.11 | [python.org](https://python.org) |
+| gcloud CLI | latest | [cloud.google.com/sdk](https://cloud.google.com/sdk/docs/install) |
+| make | — | preinstalled on macOS/Linux |
+
+On Windows, `make` is not required. Use the PowerShell steps above instead.
+
+You also need access to the GCP project `acn-researchplatform` with the **Vertex AI User** role (`roles/aiplatform.user`).
+
+---
+
+## 🛠️ Make Commands
+
+```
+make run     -> setup + auth check + web launch  (main command)
+make setup   -> create the Python venv + install dependencies + copy .env
+make auth    -> re-authenticate with Google Cloud if the token expired
+make cli     -> interactive CLI mode (terminal)
+make clean   -> remove .venv and Python caches
+make help    -> show all commands
+```
+
+### What `make run` Does
+
+```
+1. Creates .venv and installs dependencies  (skipped if already done)
+2. Copies .env.example -> .env              (skipped if already done)
+3. Checks Google Cloud credentials
+   -> if expired: opens the browser to re-authenticate (gcloud auth application-default login)
+4. Starts adk web . -> http://localhost:8000
+```
+
+---
+
+## 🔐 Authentication
+
+No API key is required for Google Cloud access. The agent uses your Google Cloud **Application Default Credentials** (ADC).
+
+```bash
+# First time or when the token expired
+make auth
+# or directly:
+gcloud auth application-default login
+```
+
+> **OIDC token for the MCP Gateway**: the Cloud Run server is private (`--no-allow-unauthenticated`). The agent automatically fetches an OIDC identity token from your ADC at startup. That token is valid for about **1 hour** — rerun `make run` if it expires.
 
 ---
 
@@ -74,20 +143,20 @@ gcloud auth application-default login
 ```
 mcp-adk-agent/
 ├── my_agent/
-│   ├── __init__.py   # Expose root_agent pour ADK
-│   ├── agent.py      # Définition de l'agent : modèle, outils, instructions
-│   └── tools.py      # Outils Python locaux (heure, calculatrice)
-├── .env              # Config Vertex AI (projet, région)
+│   ├── __init__.py   # Exposes root_agent for ADK
+│   ├── agent.py      # Agent definition: model, tools, instructions
+│   └── tools.py      # Local Python tools (time, calculator)
+├── .env              # Vertex AI config (project, region)
 ├── .env.example      # Template
-├── Makefile          # Commandes de setup et démarrage
+├── Makefile          # Setup and launch commands
 ├── requirements.txt
 └── README.md
 ```
 
-### Flux de l'agent
+### Agent Flow
 
 ```
-Utilisateur
+User
     │
     ▼
 ADK Web UI (localhost:8000)
@@ -96,30 +165,30 @@ ADK Web UI (localhost:8000)
 root_agent (Gemini 2.5 Flash via Vertex AI)
     │
     ├── MCPToolset ──── OIDC token ──►  MCP Gateway (Cloud Run)
-    │                                    └── outils dynamiques
+    │                                    └── dynamic tools
     │
-    └── outils locaux (get_current_time, calculator)
+    └── local tools (get_current_time, calculator)
 ```
 
 ---
 
 ## ⚙️ Configuration
 
-Le fichier `.env` (copié depuis `.env.example`) contient :
+The `.env` file (copied from `.env.example`) contains:
 
 ```ini
-GOOGLE_GENAI_USE_VERTEXAI=TRUE        # Backend Vertex AI (obligatoire)
+GOOGLE_GENAI_USE_VERTEXAI=TRUE        # Vertex AI backend (required)
 GOOGLE_CLOUD_PROJECT=acn-researchplatform
-GOOGLE_CLOUD_LOCATION=us-central1     # Région (modifiable)
+GOOGLE_CLOUD_LOCATION=us-central1     # Region (editable)
 ```
 
 ---
 
-## 🔧 Dépannage
+## 🔧 Troubleshooting
 
-| Erreur | Solution |
+| Error | Fix |
 |---|---|
-| `DefaultCredentialsError` | Relancer `make auth` |
-| `Token expiré (401)` après 1h | Relancer `make run` |
-| `404 / model not found` | Vérifier `GOOGLE_CLOUD_PROJECT` dans `.env` |
-| `Port 8000 déjà utilisé` | `kill $(lsof -ti:8000)` puis relancer |
+| `DefaultCredentialsError` | Run `make auth` again |
+| `Expired token (401)` after 1 hour | Run `make run` again |
+| `404 / model not found` | Check `GOOGLE_CLOUD_PROJECT` in `.env` |
+| `Port 8000 already in use` | `kill $(lsof -ti:8000)` and retry |
