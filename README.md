@@ -32,7 +32,7 @@ If the machine has nothing installed, follow this order:
 3. Clone the repository and open the project folder:
 
 ```powershell
-git clone https://github.com/julienleber/mcp-adk-agent.git
+git clone https://github.com/ilef-rjiba/MCP_test_agent.git
 cd mcp-adk-agent
 ```
 
